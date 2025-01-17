@@ -7,3 +7,6 @@ This project is a Node.js backend application containerized with Docker.
 - Node.js (v14 or higher)
 - Docker
 - Docker Compose
+
+## Usage
+docker build -t backend .
