@@ -28,7 +28,7 @@ jobs:
 
       - name: Execute ESLint
         id: eslint
-        run: npx eslint app/index.js app/src/* > eslint-report.txt || true
+        run: npm run eslint > eslint-report.txt || true
 
       - name: Load report ESLint
 
