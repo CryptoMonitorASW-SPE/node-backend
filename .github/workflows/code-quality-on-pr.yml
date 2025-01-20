@@ -30,6 +30,13 @@ jobs:
         id: eslint
         run: npx eslint app/src/**/*.ts > eslint-report.txt || true
 
+      - name: Check if ESLint report is empty
+        id: check_empty
+        run: |
+          if [ ! -s eslint-report.txt ]; then
+            echo "No linting issues found." > eslint-report.txt
+          fi
+
       - name: Load report ESLint
 
         uses: actions/upload-artifact@v4
