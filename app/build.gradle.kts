@@ -38,13 +38,13 @@ node {
 }
 
 tasks.register<NpmTask>("runBackend") {
-    dependsOn("npm_install")
-    args.set(listOf("run", "dev"))
+    dependsOn("prepareBackend")
+    args.set(listOf("run", "start"))
 }
 
-tasks.register<NpmTask>("runFrontend") {
+tasks.register<NpmTask>("prepareBackend") {
     dependsOn("npm_install")
-    args.set(listOf("run", "serve"))
+    args.set(listOf("run", "build"))
 }
 
 tasks.register("printVersion") {
