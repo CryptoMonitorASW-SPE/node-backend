@@ -18,7 +18,7 @@ RUN npm install
 COPY app/ ./
 
 # (Optional) If you had a build step for a front-end, you might do: 
-# RUN npm run build
+RUN npm run build
 
 # ================================================
 # Stage 2: Create the final image
@@ -28,11 +28,17 @@ FROM node:22.13-alpine AS build-final
 # Set working directory
 WORKDIR /usr/src/app
 
-# Copy files from the build stage
-COPY --from=build /usr/src/app /usr/src/app
+# Copy package.json and package-lock.json
+COPY app/package*.json ./
+
+# Install only production dependencies
+RUN npm install --production
+
+# Copy built JavaScript files from build stage
+COPY --from=build /usr/src/app/dist ./dist
 
 # Expose the backend port
 EXPOSE 3000
 
-# Start the application
-CMD ["node", "index.js"]
+# Start the application using the compiled JavaScript
+CMD ["npm", "start"]
