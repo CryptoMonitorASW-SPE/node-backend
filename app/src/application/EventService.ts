@@ -11,7 +11,7 @@ export class EventService implements EventInputPort {
         @inject('EventOutputPort') private eventOutput: EventOutputPort
     ) {}
 
-    async processEvent(eventJson: any): Promise<void> {
+    async processEvent(eventJson: Event): Promise<void> {
         // Convert JSON to domain model
         const event: Event = {
             eventType: eventJson.eventType,
