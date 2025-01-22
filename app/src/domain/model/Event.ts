@@ -1,6 +1,6 @@
+import { CryptoData } from './CryptoData';
 export interface Event {
     eventType: string;
-    payload: any;
+    payload: CryptoData[];
     timestamp: number;
 }
-  

@@ -2,8 +2,6 @@ import { injectable, inject } from 'tsyringe';
 import { EventInputPort } from '../application/ports/EventInputPort';
 import { EventOutputPort } from '../application/ports/EventOutputPort';
 import { Event } from '../domain/model/Event';
-import { PriceUpdatePayload } from '../domain/model/PriceUpdatePayload';
-import { BroadcastMessage } from '../domain/model/BroadcastMessage';
 
 @injectable()
 export class EventService implements EventInputPort {
@@ -12,33 +10,20 @@ export class EventService implements EventInputPort {
     ) {}
 
     async processEvent(eventJson: Event): Promise<void> {
-        // Convert JSON to domain model
-        const event: Event = {
-            eventType: eventJson.eventType,
-            payload: eventJson.payload,
-            timestamp: eventJson.timestamp
-        };
+        
+        if (!this.isValidEventData(eventJson)) {
+            throw new Error('Invalid event data');
+        }
 
-        // Process with domain models
-        const priceUpdate: PriceUpdatePayload = {
-            cryptoId: event.payload.cryptoId,
-            newPrice: event.payload.newPrice
-        };
-
-        const message: BroadcastMessage = {
-            type: 'PRICE_UPDATED',
-            cryptoId: priceUpdate.cryptoId,
-            newPrice: priceUpdate.newPrice
-        };
-
-        // Convert back to JSON for output
         const messageJson = {
-            type: message.type,
-            cryptoId: message.cryptoId,
-            newPrice: message.newPrice,
+            ...eventJson,
             timestamp: new Date().toISOString()
         };
 
         this.eventOutput.broadcast(messageJson);
+    }
+
+    private isValidEventData(eventJson: Event): boolean {
+        return !!(eventJson && eventJson.eventType && eventJson.payload);
     }
 }
