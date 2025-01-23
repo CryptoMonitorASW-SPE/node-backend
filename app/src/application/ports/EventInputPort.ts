@@ -1,3 +1,3 @@
 export interface EventInputPort {
-    processEvent(eventJson: any): Promise<void>;
+  processEvent(eventJson: any): Promise<void>
 }

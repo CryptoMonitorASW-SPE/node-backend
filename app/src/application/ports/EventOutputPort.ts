@@ -1,3 +1,3 @@
 export interface EventOutputPort {
-    broadcast(messageJson: any): void;
+  broadcast(messageJson: any): void
 }

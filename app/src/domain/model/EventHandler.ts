@@ -1,6 +1,6 @@
-import { Event, EventType } from './Event';
+import { Event, EventType } from './Event'
 
 export interface EventHandler {
-    eventTypes: EventType[];
-    handle(event: Event): void;
+  eventTypes: EventType[]
+  handle(event: Event): void
 }
