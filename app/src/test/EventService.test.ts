@@ -7,9 +7,9 @@ import { EventOutputPort } from '../application/ports/EventOutputPort'
 
 // Simple mock of EventOutputPort to verify broadcast calls
 class MockEventOutputPort implements EventOutputPort {
-  public broadcastCalls: any[] = []
+  public broadcastCalls: Event[] = []
 
-  broadcast(messageJson: any): void {
+  broadcast(messageJson: Event): void {
     this.broadcastCalls.push(messageJson)
   }
 }
@@ -132,10 +132,14 @@ describe('EventService', () => {
 
     try {
       await eventService.processEvent(invalidEvent)
-      // If no error is thrown, fail the test
       expect.fail('Expected processEvent to throw an error for invalid event data')
-    } catch (error: any) {
-      expect(error.message).to.equal('Invalid event data')
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        expect(error.message).to.equal('Invalid event data')
+      } else {
+        // If the error is not an instance of Error, fail the test
+        expect.fail('Thrown error is not an instance of Error')
+      }
     }
   })
 })
