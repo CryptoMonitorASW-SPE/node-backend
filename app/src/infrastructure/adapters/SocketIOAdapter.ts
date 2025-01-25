@@ -2,6 +2,7 @@ import { Server as NodeHttpServer } from 'http'
 import { Server as SocketIOServer } from 'socket.io'
 import { inject, injectable } from 'tsyringe'
 import { EventOutputPort } from '../../application/ports/EventOutputPort'
+import axios from 'axios'
 
 @injectable()
 export class SocketIOAdapter implements EventOutputPort {
@@ -19,8 +20,15 @@ export class SocketIOAdapter implements EventOutputPort {
         cors: { origin: '*', methods: ['GET', 'POST'] }
       })
 
-      this.io.on('connection', socket => {
+      this.io.on('connection', async socket => {
         console.log('Client connected')
+        try {
+          const response = await axios.post('http://crypto-market:8080/start')
+          console.log('POST request successful:', response.data)
+        } catch (error) {
+          console.error('Error on POST request:', error)
+        }
+
         socket.on('disconnect', () => {
           console.log('Client disconnected')
         })
