@@ -4,7 +4,8 @@ import { injectable, inject } from 'tsyringe'
 import { EventInputPort } from './ports/EventInputPort'
 import { DomainEventDispatcher, EventDispatcher } from '../domain/services/EventDispatcher'
 import { Event, EventType } from '../domain/model/Event'
-import { CryptoUpdateHandler } from '../domain/services/CryptoUpdateHandler'
+import { CryptoUpdateUsdHandler } from '../domain/services/CryptoUpdateUsdHandler'
+import { CryptoUpdateEurHandler } from '../domain/services/CryptoUpdateEurHandler'
 import { EventHandler } from '../domain/model/EventHandler'
 import { EventOutputPort } from './ports/EventOutputPort' // Ensure this import exists
 
@@ -13,15 +14,17 @@ export class EventService implements EventInputPort {
   private eventDispatcher: EventDispatcher
 
   constructor(@inject('EventOutputPort') private eventOutputPort: EventOutputPort) {
-    const cryptoUpdateHandler = new CryptoUpdateHandler(this.eventOutputPort)
+    const cryptoUpdateUsdHandler = new CryptoUpdateUsdHandler(this.eventOutputPort)
+    const cryptoUpdateEurHandler = new CryptoUpdateEurHandler(this.eventOutputPort)
     // Initialize other handlers here
-    const handlers: EventHandler[] = [cryptoUpdateHandler /*, other handlers */]
+    const handlers: EventHandler[] = [cryptoUpdateEurHandler, cryptoUpdateUsdHandler]
     const eventDispatcher = new DomainEventDispatcher(handlers)
     container.registerInstance<DomainEventDispatcher>('EventDispatcher', eventDispatcher)
     this.eventDispatcher = eventDispatcher // Assigning to the class property
   }
 
   async processEvent(eventJson: Event): Promise<void> {
+    console.log('Processing event:', eventJson)
     if (!this.isValidEventData(eventJson)) {
       throw new Error('Invalid event data')
     }
@@ -30,7 +33,24 @@ export class EventService implements EventInputPort {
   }
 
   private isValidEventData(eventJson: Event): boolean {
-    const validTypes: EventType[] = Object.values(EventType) // Dynamic retrieval of valid types
-    return !!eventJson && validTypes.includes(eventJson.eventType) && eventJson.payload.length > 0
+    const validTypes: EventType[] = Object.values(EventType)
+
+    if (!eventJson) {
+      console.error('Validation failed: eventJson is null or undefined')
+      return false
+    }
+
+    console.log('', validTypes)
+    if (!validTypes.includes(eventJson.eventType)) {
+      console.error(`Validation failed: Invalid eventType '${eventJson.eventType}'`)
+      return false
+    }
+
+    if (eventJson.payload.length === 0) {
+      console.error('Validation failed: payload is empty')
+      return false
+    }
+
+    return true
   }
 }

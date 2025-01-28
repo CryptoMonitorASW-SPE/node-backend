@@ -39,7 +39,10 @@ interface CryptoData {
 class MockEventOutputPort implements EventOutputPort {
   public broadcastCalls: Event[] = []
 
-  broadcast(messageJson: Event): void {
+  broadcastEUR(messageJson: any): void {
+    this.broadcastCalls.push(messageJson)
+  }
+  broadcastUSD(messageJson: any): void {
     this.broadcastCalls.push(messageJson)
   }
 }
@@ -61,7 +64,7 @@ describe('EventService', () => {
 
   it('should successfully dispatch a CRYPTO_UPDATE event with multiple crypto data', async () => {
     const validEvent: Event = {
-      eventType: EventType.CRYPTO_UPDATE,
+      eventType: EventType.CRYPTO_UPDATE_EUR,
       payload: [
         {
           id: 'bitcoin',
@@ -128,7 +131,7 @@ describe('EventService', () => {
     const broadcastedEvent = mockEventOutput.broadcastCalls[0]
 
     // Check for properties added by CryptoUpdateHandler
-    expect(broadcastedEvent.eventType).to.equal(EventType.CRYPTO_UPDATE)
+    expect(broadcastedEvent.eventType).to.equal(EventType.CRYPTO_UPDATE_EUR)
     expect(broadcastedEvent).to.have.property('timestamp')
 
     // Optionally, verify that the payload matches the input
@@ -138,7 +141,7 @@ describe('EventService', () => {
   it('should throw an error for invalid event data with empty payload', async () => {
     // Payload is empty, so it's invalid based on isValidEventData
     const invalidEvent: Event = {
-      eventType: EventType.CRYPTO_UPDATE,
+      eventType: EventType.CRYPTO_UPDATE_EUR,
       payload: []
     }
 

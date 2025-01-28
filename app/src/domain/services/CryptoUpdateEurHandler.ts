@@ -4,8 +4,8 @@ import { EventOutputPort } from '../../application/ports/EventOutputPort'
 import { inject, injectable } from 'tsyringe'
 
 @injectable()
-export class CryptoUpdateHandler implements EventHandler {
-  eventTypes: EventType[] = [EventType.CRYPTO_UPDATE]
+export class CryptoUpdateEurHandler implements EventHandler {
+  eventTypes: EventType[] = [EventType.CRYPTO_UPDATE_EUR]
 
   constructor(@inject('EventOutputPort') private eventOutput: EventOutputPort) {}
 
@@ -14,6 +14,6 @@ export class CryptoUpdateHandler implements EventHandler {
       ...event,
       timestamp: new Date().toISOString()
     }
-    this.eventOutput.broadcast(messageJson)
+    this.eventOutput.broadcastEUR(messageJson)
   }
 }

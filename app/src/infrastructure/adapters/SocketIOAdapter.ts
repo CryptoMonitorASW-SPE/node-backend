@@ -38,10 +38,17 @@ export class SocketIOAdapter implements EventOutputPort {
     }
   }
 
-  public broadcast(messageJson: any): void {
+  public broadcastEUR(messageJson: any): void {
     if (!this.isInitialized) {
       throw new Error('SocketIOAdapter not initialized')
     }
-    this.io.emit('broadcast', messageJson)
+    this.io.emit('broadcastEUR', messageJson)
+  }
+
+  public broadcastUSD(messageJson: any): void {
+    if (!this.isInitialized) {
+      throw new Error('SocketIOAdapter not initialized')
+    }
+    this.io.emit('broadcastUSD', messageJson)
   }
 }

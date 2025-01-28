@@ -11,7 +11,7 @@ export class EventAdapter {
   }
 
   public initialize(): void {
-    this.router.post('/realtime/events', this.handleEvent)
+    this.router.post('/realtime/events/cryptomarketdata', this.handleEvent)
     this.router.get('/health', this.healthCheck)
   }
 
