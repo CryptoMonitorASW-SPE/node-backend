@@ -5,44 +5,14 @@ import { EventService } from '../application/EventService'
 import { Event, EventType } from '../domain/model/Event'
 import { EventOutputPort } from '../application/ports/EventOutputPort'
 
-// Define the new Crypto data structure based on the provided JSON
-interface CryptoData {
-  id: string
-  symbol: string
-  name: string
-  image: string
-  price: number
-  marketCap: number
-  marketCapRank: number
-  fullyDilutedValuation: number | null
-  totalVolume: number
-  high24h: number
-  low24h: number
-  priceChange24h: number
-  priceChangePercentage24h: number
-  marketCapChange24h: number
-  marketCapChangePercentage24h: number
-  circulatingSupply: number
-  totalSupply: number
-  maxSupply: number | null
-  ath: number
-  athChangePercentage: number
-  athDate: string
-  atl: number
-  atlChangePercentage: number
-  atlDate: string
-  lastUpdated: string
-  currency: string
-}
-
 // Simple mock of EventOutputPort to verify broadcast calls
 class MockEventOutputPort implements EventOutputPort {
   public broadcastCalls: Event[] = []
 
-  broadcastEUR(messageJson: any): void {
+  broadcastEUR(messageJson: Event): void {
     this.broadcastCalls.push(messageJson)
   }
-  broadcastUSD(messageJson: any): void {
+  broadcastUSD(messageJson: Event): void {
     this.broadcastCalls.push(messageJson)
   }
 }
@@ -162,14 +132,9 @@ describe('EventService', () => {
 
   it('should throw an error for invalid event data with incorrect structure', async () => {
     // Payload has incorrect structure, e.g., missing required fields
-    const invalidEvent: any = {
-      payload: [
-        {
-          id: 'bitcoin',
-          // Missing 'symbol', 'name', etc.
-          price: 102809.0
-        }
-      ]
+    const invalidEvent: Event = {
+      eventType: EventType.CRYPTO_UPDATE_EUR,
+      payload: []
     }
 
     try {
