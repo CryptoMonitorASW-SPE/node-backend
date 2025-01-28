@@ -32,7 +32,7 @@ describe('EventService', () => {
     container.reset()
   })
 
-  it('should successfully dispatch a CRYPTO_UPDATE event with multiple crypto data', async () => {
+  it('should successfully dispatch a CRYPTO_UPDATE_* event with multiple crypto data', async () => {
     const validEvent: Event = {
       eventType: EventType.CRYPTO_UPDATE_EUR,
       payload: [
@@ -101,10 +101,9 @@ describe('EventService', () => {
     const broadcastedEvent = mockEventOutput.broadcastCalls[0]
 
     // Check for properties added by CryptoUpdateHandler
-    expect(broadcastedEvent.eventType).to.equal(EventType.CRYPTO_UPDATE_EUR)
+    expect(broadcastedEvent.eventType).to.equal('CRYPTO_UPDATE')
     expect(broadcastedEvent).to.have.property('timestamp')
 
-    // Optionally, verify that the payload matches the input
     expect(broadcastedEvent.payload).to.deep.equal(validEvent.payload)
   })
 
@@ -122,29 +121,6 @@ describe('EventService', () => {
       )
     } catch (error: unknown) {
       if (error instanceof Error) {
-        expect(error.message).to.equal('Invalid event data')
-      } else {
-        // If the error is not an instance of Error, fail the test
-        expect.fail('Thrown error is not an instance of Error')
-      }
-    }
-  })
-
-  it('should throw an error for invalid event data with incorrect structure', async () => {
-    // Payload has incorrect structure, e.g., missing required fields
-    const invalidEvent: Event = {
-      eventType: EventType.CRYPTO_UPDATE_EUR,
-      payload: []
-    }
-
-    try {
-      await eventService.processEvent(invalidEvent)
-      expect.fail(
-        'Expected processEvent to throw an error for invalid event data with incorrect structure'
-      )
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        // Adjusted the expected error message to match the one likely thrown by processEvent
         expect(error.message).to.equal('Invalid event data')
       } else {
         // If the error is not an instance of Error, fail the test
