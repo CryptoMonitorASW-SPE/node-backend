@@ -22,12 +22,6 @@ export class SocketIOAdapter implements EventOutputPort {
 
       this.io.on('connection', async socket => {
         console.log('Client connected')
-        try {
-          const response = await axios.post('http://crypto-market:8080/start')
-          console.log('POST request successful:', response.data)
-        } catch (error) {
-          console.error('Error on POST request:', error)
-        }
 
         socket.on('disconnect', () => {
           console.log('Client disconnected')
