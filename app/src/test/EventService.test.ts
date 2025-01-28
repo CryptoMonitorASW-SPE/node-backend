@@ -5,6 +5,36 @@ import { EventService } from '../application/EventService'
 import { Event, EventType } from '../domain/model/Event'
 import { EventOutputPort } from '../application/ports/EventOutputPort'
 
+// Define the new Crypto data structure based on the provided JSON
+interface CryptoData {
+  id: string
+  symbol: string
+  name: string
+  image: string
+  price: number
+  marketCap: number
+  marketCapRank: number
+  fullyDilutedValuation: number | null
+  totalVolume: number
+  high24h: number
+  low24h: number
+  priceChange24h: number
+  priceChangePercentage24h: number
+  marketCapChange24h: number
+  marketCapChangePercentage24h: number
+  circulatingSupply: number
+  totalSupply: number
+  maxSupply: number | null
+  ath: number
+  athChangePercentage: number
+  athDate: string
+  atl: number
+  atlChangePercentage: number
+  atlDate: string
+  lastUpdated: string
+  currency: string
+}
+
 // Simple mock of EventOutputPort to verify broadcast calls
 class MockEventOutputPort implements EventOutputPort {
   public broadcastCalls: Event[] = []
@@ -29,86 +59,65 @@ describe('EventService', () => {
     container.reset()
   })
 
-  it('should successfully dispatch a CRYPTO_UPDATE event', async () => {
+  it('should successfully dispatch a CRYPTO_UPDATE event with multiple crypto data', async () => {
     const validEvent: Event = {
       eventType: EventType.CRYPTO_UPDATE,
       payload: [
         {
-          id: 'btc-1',
-          symbol: 'BTC',
+          id: 'bitcoin',
+          symbol: 'btc',
           name: 'Bitcoin',
-          image: 'https://example.com/btc.png',
-          prices: {
-            values: {
-              usd: 30000,
-              eur: 28000
-            }
-          },
-          marketCap: {
-            values: {
-              usd: 600000000,
-              eur: 560000000
-            }
-          },
+          image: 'https://coin-images.coingecko.com/coins/images/1/large/bitcoin.png?1696501400',
+          price: 102809.0,
+          marketCap: 2.03866682565e12,
           marketCapRank: 1,
-          fullyDilutedValuation: {
-            values: {
-              usd: 0,
-              eur: 0
-            }
-          },
-          totalVolume: {
-            values: {
-              usd: 0,
-              eur: 0
-            }
-          },
-          high24h: {
-            values: {
-              usd: 0,
-              eur: 0
-            }
-          },
-          low24h: {
-            values: {
-              usd: 0,
-              eur: 0
-            }
-          },
-          priceChange24h: {
-            values: {
-              usd: 0,
-              eur: 0
-            }
-          },
-          priceChangePercentage24h: 0,
-          marketCapChange24h: {
-            values: {
-              usd: 0,
-              eur: 0
-            }
-          },
-          marketCapChangePercentage24h: 0,
-          circulatingSupply: 0,
-          totalSupply: 0,
-          maxSupply: 0,
-          ath: {
-            values: {
-              usd: 0,
-              eur: 0
-            }
-          },
-          athChangePercentage: 0,
-          athDate: '2023-01-01T00:00:00Z',
-          atl: {
-            values: {
-              usd: 0,
-              eur: 0
-            }
-          },
-          atlChangePercentage: 0,
-          atlDate: '2023-01-01T00:00:00Z',
-          lastUpdated: '2023-01-01T00:00:00Z'
+          fullyDilutedValuation: 2.03866682565e12,
+          totalVolume: 6.3558930111e10,
+          high24h: 103369.0,
+          low24h: 98970.0,
+          priceChange24h: 3838.84,
+          priceChangePercentage24h: 3.87881,
+          marketCapChange24h: 7.6483518863e10,
+          marketCapChangePercentage24h: 3.89788,
+          circulatingSupply: 1.9816225e7,
+          totalSupply: 1.9816225e7,
+          maxSupply: 2.1e7,
+          ath: 108786.0,
+          athChangePercentage: -5.51654,
+          athDate: '2025-01-20T09:11:54.494Z',
+          atl: 67.81,
+          atlChangePercentage: 151479.194,
+          atlDate: '2013-07-06T00:00:00.000Z',
+          lastUpdated: '2025-01-28T12:18:33.307Z',
+          currency: 'usd'
+        },
+        {
+          id: 'ethereum',
+          symbol: 'eth',
+          name: 'Ethereum',
+          image: 'https://coin-images.coingecko.com/coins/images/279/large/ethereum.png?1696501628',
+          price: 3187.37,
+          marketCap: 3.84345258778e11,
+          marketCapRank: 2,
+          fullyDilutedValuation: 3.84345258778e11,
+          totalVolume: 2.4904416448e10,
+          high24h: 3221.19,
+          low24h: 3056.13,
+          priceChange24h: 128.4,
+          priceChangePercentage24h: 4.19762,
+          marketCapChange24h: 1.5541528349e10,
+          marketCapChangePercentage24h: 4.21404,
+          circulatingSupply: 1.205120395899261e8,
+          totalSupply: 1.205120395899261e8,
+          maxSupply: null,
+          ath: 4878.26,
+          athChangePercentage: -34.66261,
+          athDate: '2021-11-10T14:24:19.604Z',
+          atl: 0.432979,
+          atlChangePercentage: 736039.37952,
+          atlDate: '2015-10-20T00:00:00.000Z',
+          lastUpdated: '2025-01-28T12:18:41.923Z',
+          currency: 'usd'
         }
       ]
     }
@@ -121,20 +130,53 @@ describe('EventService', () => {
     // Check for properties added by CryptoUpdateHandler
     expect(broadcastedEvent.eventType).to.equal(EventType.CRYPTO_UPDATE)
     expect(broadcastedEvent).to.have.property('timestamp')
+
+    // Optionally, verify that the payload matches the input
+    expect(broadcastedEvent.payload).to.deep.equal(validEvent.payload)
   })
 
-  it('should throw an error for invalid event data', async () => {
+  it('should throw an error for invalid event data with empty payload', async () => {
     // Payload is empty, so it's invalid based on isValidEventData
-    const invalidEvent = {
+    const invalidEvent: Event = {
       eventType: EventType.CRYPTO_UPDATE,
       payload: []
     }
 
     try {
       await eventService.processEvent(invalidEvent)
-      expect.fail('Expected processEvent to throw an error for invalid event data')
+      expect.fail(
+        'Expected processEvent to throw an error for invalid event data with empty payload'
+      )
     } catch (error: unknown) {
       if (error instanceof Error) {
+        expect(error.message).to.equal('Invalid event data')
+      } else {
+        // If the error is not an instance of Error, fail the test
+        expect.fail('Thrown error is not an instance of Error')
+      }
+    }
+  })
+
+  it('should throw an error for invalid event data with incorrect structure', async () => {
+    // Payload has incorrect structure, e.g., missing required fields
+    const invalidEvent: any = {
+      payload: [
+        {
+          id: 'bitcoin',
+          // Missing 'symbol', 'name', etc.
+          price: 102809.0
+        }
+      ]
+    }
+
+    try {
+      await eventService.processEvent(invalidEvent)
+      expect.fail(
+        'Expected processEvent to throw an error for invalid event data with incorrect structure'
+      )
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        // Adjusted the expected error message to match the one likely thrown by processEvent
         expect(error.message).to.equal('Invalid event data')
       } else {
         // If the error is not an instance of Error, fail the test
