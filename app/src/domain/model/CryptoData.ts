@@ -3,75 +3,26 @@ export interface CryptoData {
   symbol: string
   name: string
   image: string
-  prices: {
-    values: {
-      usd: number
-      eur: number
-    }
-  }
-  marketCap: {
-    values: {
-      usd: number
-      eur: number
-    }
-  }
+  price: number
+  marketCap: number
   marketCapRank: number
-  fullyDilutedValuation: {
-    values: {
-      usd: number
-      eur: number
-    }
-  }
-  totalVolume: {
-    values: {
-      usd: number
-      eur: number
-    }
-  }
-  high24h: {
-    values: {
-      usd: number
-      eur: number
-    }
-  }
-  low24h: {
-    values: {
-      usd: number
-      eur: number
-    }
-  }
-  priceChange24h: {
-    values: {
-      usd: number
-      eur: number
-    }
-  }
+  fullyDilutedValuation: number
+  totalVolume: number
+  high24h: number
+  low24h: number
+  priceChange24h: number
   priceChangePercentage24h: number
-  marketCapChange24h: {
-    values: {
-      usd: number
-      eur: number
-    }
-  }
+  marketCapChange24h: number
   marketCapChangePercentage24h: number
   circulatingSupply: number
   totalSupply: number
-  maxSupply: number
-  ath: {
-    values: {
-      usd: number
-      eur: number
-    }
-  }
+  maxSupply: number | null
+  ath: number
   athChangePercentage: number
   athDate: string
-  atl: {
-    values: {
-      usd: number
-      eur: number
-    }
-  }
+  atl: number
   atlChangePercentage: number
   atlDate: string
   lastUpdated: string
+  currency: string
 }
