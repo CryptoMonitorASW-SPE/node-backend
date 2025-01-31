@@ -22,7 +22,6 @@ export class EventService implements EventInputPort {
   }
 
   async processEvent(eventJson: Event): Promise<void> {
-    console.log('Processing event:', eventJson)
     if (!this.isValidEventData(eventJson)) {
       throw new Error('Invalid event data')
     }
@@ -38,7 +37,6 @@ export class EventService implements EventInputPort {
       return false
     }
 
-    console.log('', validTypes)
     if (!validTypes.includes(eventJson.eventType)) {
       console.error(`Validation failed: Invalid eventType '${eventJson.eventType}'`)
       return false
