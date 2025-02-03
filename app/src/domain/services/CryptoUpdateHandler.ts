@@ -1,7 +1,7 @@
 import { EventHandler } from '../model/EventHandler'
 import { Event, EventType } from '../model/Event'
 import { CryptoPriceData } from '../model/CryptoPriceData'
-import { EventOutputPort } from '../../application/ports/EventOutputPort'
+import { EventOutputPort } from '../ports/EventOutputPort'
 import { inject, injectable } from 'tsyringe'
 import axios from 'axios'
 import { createViewUpdateMessage, ViewUpdateMessage } from './ViewUpdateMessage'

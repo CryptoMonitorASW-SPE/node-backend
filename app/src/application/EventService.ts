@@ -1,12 +1,12 @@
 // EventService.ts
 import { container } from 'tsyringe'
 import { injectable, inject } from 'tsyringe'
-import { EventInputPort } from './ports/EventInputPort'
+import { EventInputPort } from '../domain/ports/EventInputPort'
 import { DomainEventDispatcher, EventDispatcher } from '../domain/services/EventDispatcher'
 import { Event, EventType } from '../domain/model/Event'
 import { CryptoUpdateHandler } from '../domain/services/CryptoUpdateHandler'
 import { EventHandler } from '../domain/model/EventHandler'
-import { EventOutputPort } from './ports/EventOutputPort' // Ensure this import exists
+import { EventOutputPort } from '../domain/ports/EventOutputPort' // Ensure this import exists
 
 @injectable()
 export class EventService implements EventInputPort {

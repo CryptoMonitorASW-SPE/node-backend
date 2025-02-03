@@ -3,7 +3,7 @@ import { expect } from 'chai'
 import { container } from 'tsyringe'
 import { EventService } from '../application/EventService'
 import { Event, EventType } from '../domain/model/Event'
-import { EventOutputPort } from '../application/ports/EventOutputPort'
+import { EventOutputPort } from '../domain/ports/EventOutputPort'
 
 // Simple mock of EventOutputPort to verify broadcast calls
 class MockEventOutputPort implements EventOutputPort {

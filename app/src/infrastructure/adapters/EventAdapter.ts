@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express'
 import { injectable, inject } from 'tsyringe'
-import { EventInputPort } from '../../application/ports/EventInputPort'
+import { EventInputPort } from '../../domain/ports/EventInputPort'
 
 @injectable()
 export class EventAdapter {
