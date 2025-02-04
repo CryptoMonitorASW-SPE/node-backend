@@ -7,7 +7,7 @@ import { EventOutputPort } from '../domain/ports/EventOutputPort'
 
 // Simple mock of EventOutputPort to verify broadcast calls
 class MockEventOutputPort implements EventOutputPort {
-  sendToUser(userId: string, arg1: { message: any }): unknown {
+  sendToUser(userId: string, arg1: { message: string }): unknown {
     console.log(userId, arg1)
     throw new Error('Method not implemented.')
   }
