@@ -7,7 +7,7 @@ export interface EventDispatcher {
 }
 
 export class DomainEventDispatcher implements EventDispatcher {
-  private handlers: Map<EventType, EventHandler[]> = new Map()
+  private handlers = new Map<EventType, EventHandler[]>()
 
   constructor(handlers: EventHandler[]) {
     handlers.forEach(handler => {

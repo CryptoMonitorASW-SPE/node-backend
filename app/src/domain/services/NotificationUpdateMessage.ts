@@ -1,4 +1,3 @@
-import { CryptoData } from '../model/CryptoData'
 import { CryptoPriceData } from '../model/CryptoPriceData'
 import { Event } from '../model/Event'
 
@@ -12,7 +11,7 @@ export function createNotificationUpdateMessage(
   eventInbound: Event
 ): NotificationUpdateMessage {
   const cryptoPriceData: CryptoPriceData[] = eventInbound.payload.map(
-    (crypto: { id: any; symbol: any; price: any }) => ({
+    (crypto: { id: string; symbol: string; price: number }) => ({
       id: crypto.id,
       symbol: crypto.symbol,
       price: crypto.price
