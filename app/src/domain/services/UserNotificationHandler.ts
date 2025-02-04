@@ -10,10 +10,23 @@ export class UserNotificationHandler implements EventHandler {
   constructor(@inject('EventOutputPort') private eventOutput: EventOutputPort) {}
 
   handle(event: Event): void {
-    const { userId, message } = event.payload
-    console.log(`[USERNOTIFICATIONHANDLER] Sending notification to user ${userId}: ${message}`)
+    const { userId, alertPrice, currentPrice, alertType, message } = event.payload
+
+    let notificationMessage: string
+
+    if (message) {
+      // Use the user's custom message if provided
+      notificationMessage = message
+    } else {
+      // Craft a default message based on the alert type and data
+      notificationMessage = `Bitcoin price ${alertType === 'ABOVE' ? 'surpassed' : 'dropped below'} your target of $${alertPrice}. Current price is $${currentPrice}.`
+    }
+
+    console.log(
+      `[USERNOTIFICATIONHANDLER] Sending notification to user ${userId}: ${notificationMessage}`
+    )
 
     // Send the notification to the specific user via the EventOutputPort
-    this.eventOutput.sendToUser(userId, { message })
+    this.eventOutput.sendToUser(userId, { message: notificationMessage })
   }
 }
