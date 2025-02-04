@@ -7,6 +7,9 @@ import { EventOutputPort } from '../domain/ports/EventOutputPort'
 
 // Simple mock of EventOutputPort to verify broadcast calls
 class MockEventOutputPort implements EventOutputPort {
+  sendToUser(userId: any, arg1: { message: any }): unknown {
+    throw new Error('Method not implemented.')
+  }
   public broadcastCalls: Event[] = []
 
   broadcastEUR(messageJson: Event): void {
