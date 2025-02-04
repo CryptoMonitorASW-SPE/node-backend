@@ -1,6 +1,8 @@
 import { Router, Request, Response } from 'express'
 import { injectable, inject } from 'tsyringe'
 import { EventInputPort } from '../../domain/ports/EventInputPort'
+import { EventType } from '../../domain/model/Event'
+import { Event } from '../../domain/model/Event'
 
 @injectable()
 export class EventAdapter {
@@ -11,8 +13,35 @@ export class EventAdapter {
   }
 
   public initialize(): void {
+    this.router.post('/realtime/events/notifyUser', this.handleNotifyUser)
     this.router.post('/realtime/events/cryptomarketdata', this.handleEvent)
     this.router.get('/health', this.healthCheck)
+  }
+
+  private handleNotifyUser = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { userId, cryptoId, alertPrice, currentPrice, alertType, message } = req.body
+      console.log('[EVENTADAPTER] Received notifyUser event:', req.body)
+      //TOEHNANCE
+      if (!userId || !message) {
+        res.status(400).json({ error: 'Bad Request: userId and message are required' })
+        return
+      }
+
+      // Construct the event object
+      const event: Event = {
+        eventType: EventType.USER_NOTIFICATION,
+        payload: { userId, cryptoId, alertPrice, currentPrice, alertType, message }
+      }
+
+      // Process the event through the input port
+      await this.eventInput.processEvent(event)
+
+      res.status(200).json({ status: 'Notification event processed' })
+    } catch (error) {
+      console.error('Error processing notifyUser event:', error)
+      res.status(500).json({ error: 'Internal Server Error' })
+    }
   }
 
   private handleEvent = async (req: Request, res: Response): Promise<void> => {

@@ -7,6 +7,7 @@ import { Event, EventType } from '../domain/model/Event'
 import { CryptoUpdateHandler } from '../domain/services/CryptoUpdateHandler'
 import { EventHandler } from '../domain/model/EventHandler'
 import { EventOutputPort } from '../domain/ports/EventOutputPort' // Ensure this import exists
+import { UserNotificationHandler } from '../domain/services/UserNotificationHandler'
 
 @injectable()
 export class EventService implements EventInputPort {
@@ -14,8 +15,9 @@ export class EventService implements EventInputPort {
 
   constructor(@inject('EventOutputPort') private eventOutputPort: EventOutputPort) {
     const cryptoUpdateHandler = new CryptoUpdateHandler(eventOutputPort)
+    const userNotificationHandler = new UserNotificationHandler(eventOutputPort) // Create instance of the new handler
     // Initialize other handlers here
-    const handlers: EventHandler[] = [cryptoUpdateHandler]
+    const handlers: EventHandler[] = [cryptoUpdateHandler, userNotificationHandler] // Add the new handler to the list
     const eventDispatcher = new DomainEventDispatcher(handlers)
     container.registerInstance<DomainEventDispatcher>('EventDispatcher', eventDispatcher)
     this.eventDispatcher = eventDispatcher // Assigning to the class property

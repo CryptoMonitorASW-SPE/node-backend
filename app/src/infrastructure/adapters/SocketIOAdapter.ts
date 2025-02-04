@@ -76,8 +76,6 @@ export class SocketIOAdapter implements EventOutputPort {
 
         // Store socket in map
         this.userSocketMap[userId] = socket
-        //test
-        this.sendToUser(userId, { message: 'Welcome!' })
         socket.on('disconnect', () => {
           console.log(`Client disconnected (auth socket): userId=${userId}, socketId=${socket.id}`)
           // Clean up user socket reference if it hasn’t changed

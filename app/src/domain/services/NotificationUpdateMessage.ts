@@ -11,11 +11,13 @@ export function createNotificationUpdateMessage(
   timestamp: string,
   eventInbound: Event
 ): NotificationUpdateMessage {
-  const cryptoPriceData: CryptoPriceData[] = eventInbound.payload.map(crypto => ({
-    id: crypto.id,
-    symbol: crypto.symbol,
-    price: crypto.price
-  }))
+  const cryptoPriceData: CryptoPriceData[] = eventInbound.payload.map(
+    (crypto: { id: any; symbol: any; price: any }) => ({
+      id: crypto.id,
+      symbol: crypto.symbol,
+      price: crypto.price
+    })
+  )
 
   return {
     timestamp,
