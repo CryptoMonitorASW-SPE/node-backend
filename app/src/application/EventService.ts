@@ -27,7 +27,6 @@ export class EventService implements EventInputPort {
     if (!this.isValidEventData(eventJson)) {
       throw new Error('Invalid event data')
     }
-
     this.eventDispatcher.dispatch(eventJson)
   }
 

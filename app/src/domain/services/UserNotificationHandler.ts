@@ -22,10 +22,6 @@ export class UserNotificationHandler implements EventHandler {
       notificationMessage = `Bitcoin price ${alertType === 'ABOVE' ? 'surpassed' : 'dropped below'} your target of $${alertPrice}. Current price is $${currentPrice}.`
     }
 
-    console.log(
-      `[USERNOTIFICATIONHANDLER] Sending notification to user ${userId}: ${notificationMessage}`
-    )
-
     // Send the notification to the specific user via the EventOutputPort
     this.eventOutput.sendToUser(userId, { message: notificationMessage })
   }

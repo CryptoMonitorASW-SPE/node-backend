@@ -21,10 +21,9 @@ export class EventAdapter {
   private handleNotifyUser = async (req: Request, res: Response): Promise<void> => {
     try {
       const { userId, cryptoId, alertPrice, currentPrice, alertType, message } = req.body
-      console.log('[EVENTADAPTER] Received notifyUser event:', req.body)
-      //TOEHNANCE
-      if (!userId || !message) {
-        res.status(400).json({ error: 'Bad Request: userId and message are required' })
+
+      if (!userId) {
+        res.status(400).json({ error: 'Bad Request: userId is required' })
         return
       }
 
