@@ -10,7 +10,7 @@ export class UserNotificationHandler implements EventHandler {
   constructor(@inject('EventOutputPort') private eventOutput: EventOutputPort) {}
 
   handle(event: Event): void {
-    const { userId, alertPrice, currentPrice, alertType, message } = event.payload
+    const { userId, cryptoId, alertPrice, currentPrice, alertType, message } = event.payload
 
     let notificationMessage: string
 
@@ -19,7 +19,7 @@ export class UserNotificationHandler implements EventHandler {
       notificationMessage = message
     } else {
       // Craft a default message based on the alert type and data
-      notificationMessage = `Bitcoin price ${alertType === 'ABOVE' ? 'surpassed' : 'dropped below'} your target of $${alertPrice}. Current price is $${currentPrice}.`
+      notificationMessage = `${cryptoId} price ${alertType === 'ABOVE' ? 'surpassed' : 'dropped below'} your target of $${alertPrice}. Current price is $${currentPrice}.`
     }
 
     // Send the notification to the specific user via the EventOutputPort
